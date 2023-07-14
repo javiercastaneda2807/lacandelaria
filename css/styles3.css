@@ -5,12 +5,12 @@
 :root{
     --blue: rgba(18, 48, 118, 0.8);
     --white: white;
-    --btn1: #44f8fe;
-    --btn2: #FF7594;
-    --btn3: #1d8154;
-    --btn4: #FFB100;
-    --btn5: #2EAA83;
-    --btn6: #D86DFF;
+    --btn1: #1976D2;
+    --btn2: #1976D2;
+    --btn3: #1976D2;
+    --btn4: #1976D2;
+    --btn5: #1976D2;
+    --btn6: #1976D2;
 }
 
 *{
@@ -86,15 +86,15 @@ nav ul li a{
     text-decoration: none;
     font-weight: 800;
     font-size: 20px;
-    background-color: #5e4680;
+    background-color: #1976D2;
     padding: 10px;
     border-radius: 10px;
     transition: all 300ms;
 }
 
 nav ul li:hover a{
-        background-color: #468054;
-    }
+    background-color: #032c55;
+}
 
 nav ul li a:hover{
     color: var(--white);
@@ -110,7 +110,7 @@ nav ul #form-nav{
 nav form input,
 nav form button{
     color: var(--white);
-    background-color: #5e4680;
+    background-color: #1976D2;
     padding: 10px;
     border: rgba(175, 175, 175, 0.268) 1px solid;
     outline: none;
@@ -124,7 +124,7 @@ nav form button{
     transition: all 300ms;
 }
 nav form button:hover{
-    background-color: #5e4680;;
+    background-color: #032c55;
     color: var(--white);
 }
 
@@ -163,7 +163,7 @@ main{
 .square4,
 .square5,
 .square6{
-    background-color: #6476a6;
+    background-color: #032c55;
     position: relative;
     border-radius: 10px;
 }
