@@ -16,128 +16,120 @@ require_once 'templeat/header.php';
                 </div>
                 <div id="background">
                     <div id="text">
-                        <?php 
-                        $anos = conseguirAno($db, true);
-
+                        <h2 style="color: white">1° año</h2>
+                        <?php $anos = conseguirAno($db, true);
+                        
                         if (!empty($anos)):
                             $_SESSION['anos'] = $anos;
                             while ($_SESSION['grado'] = mysqli_fetch_assoc($_SESSION['anos'])):
                         ?>
-                        <h2>1° año</h2>
-                                <a href="estudiantes.php?id=<?=$_SESSION['grado']['id']?>"><?=$_SESSION['grado']['ano']. '|' .$_SESSION['grado']['seccion']?></a>
+                            <a href="estudiantes.php?id=<?=$_SESSION['grado']['id']?>">
+                                <?=$_SESSION['grado']['ano']. ' | Sección ' .$_SESSION['grado']['seccion']?></a> <br> <br>
+
+                        <?php endwhile; endif;?>
+                    </div>
+                </div>
+            </div>
+            <div class="squares square2">
+                <div id="content">
+                    <i class="fa-solid fa-2"></i>
+                </div>
+                <div id="background">
+                    <div id="text">
+                        <h2 style="color: white">2° año</h2>
+                        <?php $anos = conseguirAno($db, null, true);
+
+                        if (!empty($anos)):
+                            while ($ano = mysqli_fetch_assoc($anos)):
+                        ?>
+                            <a href="estudiantes.php?id=<?=$ano['id']?>">
+                                <?=$ano['ano']. ' | Sección ' .$ano['seccion']?></a> <br> <br>
+
+                        <?php endwhile; endif;?>
+                    </div>
+                </div>
+            </div>
+            <div class="squares square3">
+                <div id="content">
+                    <i class="fa-solid fa-3"></i>
+                </div>
+                <div id="background">
+                    <div id="text">
+                        <h2 style="color: white">3° año</h2>
+
+                        <?php $anos = conseguirAno($db, null, null, true);
+
+                        if (!empty($anos)):
+                            while ($ano = mysqli_fetch_assoc($anos)):
+                        ?>                      
+                        <a href="estudiantes.php?id=<?=$ano['id']?>">
+                            <?=$ano['ano']. ' | Sección ' .$ano['seccion']?></a> <br> <br>
+
+                        <?php endwhile; endif;?>
+                    </div>
+                </div>
+            </div>
+            <div class="squares square4">
+                <div id="content">
+                    <i class="fa-solid fa-4"></i>
+                </div>
+                <div id="background">
+                    <div id="text">
+                        <h2 style="color: white">4° año</h2>
+                        <?php $anos = conseguirAno($db, null, null, null, true);
+
+                        if (!empty($anos)):
+                            while ($ano = mysqli_fetch_assoc($anos)):
+                        ?>
+                        <a href="estudiantes.php?id=<?=$ano['id']?>">
+                            <?=$ano['ano']. ' | Sección ' .$ano['seccion']?></a> <br> <br>
+
                         <?php endwhile;?>
                         <?php endif;?>
                     </div>
                 </div>
             </div>
+            <div class="squares square5">
+                <div id="content">
+                    <i class="fa-solid fa-5"></i>
+                </div>
+                <div id="background">
+                    <div id="text">
+                        <h2 style="color: white">5° año</h2>
+                        <?php $anos = conseguirAno($db, null, null, null, null,true);
 
-            
-                <div class="squares square2">
-                    <div id="content">
-                        <i class="fa-solid fa-2"></i>
-                    </div>
-                    <div id="background">
-                        <div id="text">
-                            <?php 
-                            $anos = conseguirAno($db, null, true);
+                        if (!empty($anos)):
+                            while ($ano = mysqli_fetch_assoc($anos)):
+                        ?>
+                        <a href="estudiantes.php?id=<?=$ano['id']?>">
+                            <?=$ano['ano']. ' | Sección ' .$ano['seccion']?></a> <br> <br>
 
-                            if (!empty($anos)):
-                                while ($ano = mysqli_fetch_assoc($anos)):
-                            ?>
-                        <h2>2° año</h2>
-                                <a href="estudiantes.php?id=<?=$ano['id']?>"><?=$ano['ano']. '|' .$ano['seccion']?></a>
-                            <?php endwhile;?>
-                            <?php endif;?>
-                        </div>
+                        <?php endwhile;?>
+                        <?php endif;?>
                     </div>
                 </div>
-            
+            </div>
+            <div class="squares square6">
+                <div id="content">
+                    <i class="fa-solid fa-6"></i>
+                </div>
+                <div id="background">
+                    <div id="text">
+                        <h2 style="color: white">6° año</h2>
+                        <?php  $anos = conseguirAno($db, null, null, null, null, null, true);
 
-            
-          
-                <div class="squares square3">
-                    <div id="content">
-                        <i class="fa-solid fa-3"></i>
-                    </div>
-                    <div id="background">
-                        <div id="text">
-                            <?php 
-                            $anos = conseguirAno($db, null, null, true);
+                        if (!empty($anos)):
+                            while ($ano = mysqli_fetch_assoc($anos)):
+                        ?>
+                        <a href="estudiantes.php?id=<?=$ano['id']?>">
+                            <?=$ano['ano']. ' | Sección ' .$ano['seccion']?></a> <br> <br>
 
-                            if (!empty($anos)):
-                                while ($ano = mysqli_fetch_assoc($anos)):
-                            ?>
-                        <h2>3° año</h2>
-                                <a href="estudiantes.php?id=<?=$ano['id']?>"><?=$ano['ano']. '|' .$ano['seccion']?></a>
-                            <?php endwhile;?>
-                            <?php endif;?>
-                        </div>
+                        <?php endwhile;?>
+                        <?php endif;?>
                     </div>
                 </div>
-
-                <div class="squares square4">
-                    <div id="content">
-                        <i class="fa-solid fa-4"></i>
-                    </div>
-                    <div id="background">
-                        <div id="text">
-                            <?php 
-                            $anos = conseguirAno($db, null, null, null, true);
-
-                            if (!empty($anos)):
-                                while ($ano = mysqli_fetch_assoc($anos)):
-                            ?>
-                        <h2>4° año</h2>
-                                <a href="estudiantes.php?id=<?=$ano['id']?>"><?=$ano['ano']. '|' .$ano['seccion']?></a>
-                            <?php endwhile;?>
-                            <?php endif;?>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="squares square5">
-                    <div id="content">
-                        <i class="fa-solid fa-5"></i>
-                    </div>
-                    <div id="background">
-                        <div id="text">
-                            <?php 
-                            $anos = conseguirAno($db, null, null, null, null,true);
-
-                            if (!empty($anos)):
-                                while ($ano = mysqli_fetch_assoc($anos)):
-                            ?>
-                        <h2>5° año</h2>
-                                <a href="estudiantes.php?id=<?=$ano['id']?>"><?=$ano['ano']. '|' .$ano['seccion']?></a>
-                            <?php endwhile;?>
-                            <?php endif;?>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="squares square6">
-                    <div id="content">
-                        <i class="fa-solid fa-6"></i>
-                    </div>
-                    <div id="background">
-                        <div id="text">
-                            <?php 
-                            $anos = conseguirAno($db, null, null, null, null, null, true);
-
-                            if (!empty($anos)):
-                                while ($ano = mysqli_fetch_assoc($anos)):
-                            ?>
-                        <h2>6° año</h2>
-                                <a href="estudiantes.php?id=<?=$ano['id']?>"><?=$ano['ano']. '|' .$ano['seccion']?></a>
-                            <?php endwhile;?>
-                            <?php endif;?>
-                        </div>
-                    </div>
-                </div>
+            </div>
         </div>
-
-
-            
     </main>
     <script src="https://kit.fontawesome.com/5818af7131.js" crossorigin="anonymous"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
