@@ -1,14 +1,11 @@
 <?php 
 require_once 'templeat/header.php'; 
+if (!isset($_SESSION['usuario_admin']) && !isset($_SESSION['usuario_lector'])) {
+    $_SESSION['alertas'] = 'Por favor introducir un usuario';
+    header('location: login_form.php');
+}
 ?>
-<body>
-
-    <div class="loader-container">
-        <div class="loader">
-
-        </div>
-    </div>
-    <main>
+    <main>  
         <div class="container">
             <div class="squares square1">
                 <div id="content">
@@ -18,15 +15,14 @@ require_once 'templeat/header.php';
                     <div id="text">
                         <h2 style="color: white">1° año</h2>
                         <?php $anos = conseguirAno($db, true);
-                        
-                        if (!empty($anos)):
-                            $_SESSION['anos'] = $anos;
-                            while ($_SESSION['grado'] = mysqli_fetch_assoc($_SESSION['anos'])):
+                            if (!empty($anos)):
+                                $_SESSION['anos'] = $anos;
+                                while ($_SESSION['grado'] = mysqli_fetch_assoc($_SESSION['anos'])):
                         ?>
-                            <a href="estudiantes.php?id=<?=$_SESSION['grado']['id']?>">
-                                <?=$_SESSION['grado']['ano']. ' | Sección ' .$_SESSION['grado']['seccion']?></a> <br> <br>
-
-                        <?php endwhile; endif;?>
+                                <a href="estudiantes.php?id=<?=$_SESSION['grado']['id']?>"><?=$_SESSION['grado']['ano'].' | Sección ' .$_SESSION['grado']['seccion']?></a> <br> <br>
+                        
+                        <?php endwhile;?>
+                        <?php endif;?>
                     </div>
                 </div>
             </div>
@@ -36,16 +32,18 @@ require_once 'templeat/header.php';
                 </div>
                 <div id="background">
                     <div id="text">
-                        <h2 style="color: white">2° año</h2>
-                        <?php $anos = conseguirAno($db, null, true);
+                        <h2>2° año</h2>
+                        <?php 
+                            $anos = conseguirAno($db, null, true);
 
-                        if (!empty($anos)):
-                            while ($ano = mysqli_fetch_assoc($anos)):
-                        ?>
-                            <a href="estudiantes.php?id=<?=$ano['id']?>">
-                                <?=$ano['ano']. ' | Sección ' .$ano['seccion']?></a> <br> <br>
-
-                        <?php endwhile; endif;?>
+                            if (!empty($anos)):
+                                while ($ano = mysqli_fetch_assoc($anos)):
+                            ?>
+                        
+                            <a href="estudiantes.php?id=<?=$ano['id']?>"><?=$ano['ano']. '| Sección ' .$ano['seccion']?></a> <br> <br>
+                        
+                        <?php endwhile;?>
+                        <?php endif;?>
                     </div>
                 </div>
             </div>
@@ -55,17 +53,16 @@ require_once 'templeat/header.php';
                 </div>
                 <div id="background">
                     <div id="text">
-                        <h2 style="color: white">3° año</h2>
-
-                        <?php $anos = conseguirAno($db, null, null, true);
+                    <h2>3° año</h2>
+                        <?php 
+                        $anos = conseguirAno($db, null, null, true);
 
                         if (!empty($anos)):
                             while ($ano = mysqli_fetch_assoc($anos)):
-                        ?>                      
-                        <a href="estudiantes.php?id=<?=$ano['id']?>">
-                            <?=$ano['ano']. ' | Sección ' .$ano['seccion']?></a> <br> <br>
-
-                        <?php endwhile; endif;?>
+                        ?>
+                            <a href="estudiantes.php?id=<?=$ano['id']?>"><?=$ano['ano']. '| Sección ' .$ano['seccion']?></a>  <br> <br>
+                        <?php endwhile;?>
+                        <?php endif;?>
                     </div>
                 </div>
             </div>
@@ -75,15 +72,14 @@ require_once 'templeat/header.php';
                 </div>
                 <div id="background">
                     <div id="text">
-                        <h2 style="color: white">4° año</h2>
-                        <?php $anos = conseguirAno($db, null, null, null, true);
+                    <h2>4° año</h2>
+                        <?php 
+                        $anos = conseguirAno($db, null, null, null, true);
 
                         if (!empty($anos)):
                             while ($ano = mysqli_fetch_assoc($anos)):
-                        ?>
-                        <a href="estudiantes.php?id=<?=$ano['id']?>">
-                            <?=$ano['ano']. ' | Sección ' .$ano['seccion']?></a> <br> <br>
-
+                        ?>                        
+                            <a href="estudiantes.php?id=<?=$ano['id']?>"><?=$ano['ano']. '| Sección ' .$ano['seccion']?></a>  <br> <br>
                         <?php endwhile;?>
                         <?php endif;?>
                     </div>
@@ -95,15 +91,15 @@ require_once 'templeat/header.php';
                 </div>
                 <div id="background">
                     <div id="text">
-                        <h2 style="color: white">5° año</h2>
-                        <?php $anos = conseguirAno($db, null, null, null, null,true);
+                        <h2>5° año</h2>
+                        <?php 
+                        $anos = conseguirAno($db, null, null, null, null,true);
 
                         if (!empty($anos)):
                             while ($ano = mysqli_fetch_assoc($anos)):
                         ?>
-                        <a href="estudiantes.php?id=<?=$ano['id']?>">
-                            <?=$ano['ano']. ' | Sección ' .$ano['seccion']?></a> <br> <br>
-
+                    
+                            <a href="estudiantes.php?id=<?=$ano['id']?>"><?=$ano['ano']. '| Sección ' .$ano['seccion']?></a>  <br> <br>
                         <?php endwhile;?>
                         <?php endif;?>
                     </div>
@@ -115,15 +111,15 @@ require_once 'templeat/header.php';
                 </div>
                 <div id="background">
                     <div id="text">
-                        <h2 style="color: white">6° año</h2>
-                        <?php  $anos = conseguirAno($db, null, null, null, null, null, true);
+                    <h2>6° año</h2>
+                        <?php 
+                        $anos = conseguirAno($db, null, null, null, null, null, true);
 
                         if (!empty($anos)):
                             while ($ano = mysqli_fetch_assoc($anos)):
                         ?>
-                        <a href="estudiantes.php?id=<?=$ano['id']?>">
-                            <?=$ano['ano']. ' | Sección ' .$ano['seccion']?></a> <br> <br>
-
+                
+                            <a href="estudiantes.php?id=<?=$ano['id']?>"><?=$ano['ano']. '| Sección ' .$ano['seccion']?></a> <br> <br>
                         <?php endwhile;?>
                         <?php endif;?>
                     </div>
@@ -131,11 +127,12 @@ require_once 'templeat/header.php';
             </div>
         </div>
     </main>
+    <!--iconos de los años -->
     <script src="https://kit.fontawesome.com/5818af7131.js" crossorigin="anonymous"></script>
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+     <!--footer -->                               
     <script src="https://kit.fontawesome.com/5818af7131.js" crossorigin="anonymous"></script>
     <?php
+    
   include_once 'templeat/footer.php';
   ?>
 
