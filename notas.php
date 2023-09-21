@@ -1,76 +1,71 @@
-<?php 
-include_once 'templeat/header.php';
-?>
-<div class="container mt-2" style="height: 500px;  position: relative;">
-    
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card hola">
-                <div class="card-header">
-                    
-                    
-                 Lista de estudiantes
+<?php include_once 'templeat/header.php';
+if (!isset($_SESSION['usuario_admin']) && !isset($_SESSION['usuario_lector'])) {
+    $_SESSION['alertas'] = 'Por favor introducir un usuario';
+    header('location: login_form.php');
+}
 
-                </div>
-                <div class="p-4">
-                    <div class="">
-                        <table class="table align-middle ">
-                            <thead style="position: inherit;">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Apellido</th>
-                                    <th scope="col">Cedula</th>
-                                    <th scope="col" colspan="3">Notas</th>
-                                    <th scope="col">Enviar</th>
-                                    
-                                </tr>
-                                    
-                            </thead>
-                            <tbody>
-                            <?php $alumnos = conseguirAlumno($db); 
-                                if (!empty($alumnos)):
-                                    while ($alumno = mysqli_fetch_assoc($alumnos)):
+$query = "SELECT ano.id, ano.ano, seccion.seccion FROM ano left join seccion on seccion.id = ano.id_seccion";
+$resultado= mysqli_query($db, $query);
 
-                                       
-                        ?>
-                            <form action="administrar.php" method="POST">
-                                <tr class="">
-                                    <td scope="row"><?= $alumno['id'] ?></td>
-                                    <td><?= $alumno['nombre']?></td>
-                                    <td><?= $alumno['apellido'] ?></td>
-                                    <td><?= $alumno['cedula'] ?></td>
-                                    <?php $nota = Nonotas($db); 
-                                
-                                    while ($notas = mysqli_fetch_assoc($nota)){
-                                    ?>
-                                    <td><input name="nota" value="<?=$notas['nota']?>"> </input></td>
-                                    <?php  } ?>
-                                    <input type="hidden" name="estudiante" value="<?=$alumno['id']?>">
-                                    <td><input type="submit"></td>
-                                </tr>
-                            </form>
-                                <?php
-                                endwhile;
-                             endif; 
+if (isset($_SESSION['alerta']['plan'])): ?>
+    <div class="alert alert-danger" role="alert">
+    <?php echo $_SESSION['alerta']['plan']; ?>
+  </div>
+<?php endif;?>
+<script language="javascript">
+			$(document).ready(function(){
+				$("#cbx_ano").change(function () {
+					$("#cbx_ano option:selected").each(function () {
+						id_ano = $(this).val();
+                        console.log(id_ano);
+						$.post("getMateria.php", { id_ano: id_ano }, function(data){
+							$("#cbx_materia").html(data);
+						});            
+					});
+				})
+			});
 
-                                
-                             ?>        
-
-                                    
-                               
-                                
-                            </tbody>
-
-                        </table>
-                    </div>
+</script>
+<h2>Registro de notas</h2>
+    <form method="POST" action='notas_view.php' id="register">
+        <label for="first-name">Año
+        <select name="ano" id="cbx_ano" class="select">
+        <option value="0">Seleccionar Año</option>
+             <?php 
+            if(!empty($resultado)):
+                 while ($row = mysqli_fetch_assoc($resultado)):
+             ?>
+                <option value="<?=$row['id']?>"><?=$row['ano'].' '. $row['seccion']?></option>`
+                                            
+                <?php 
+            endwhile;
+        endif;
+        ?>
+             </select>
+        </label>
             
-                </div>
-            </div>
+       
+       
+    <label for="">Materias
+         <select name="materia" id="cbx_materia" class="select"></select>
+    </label>
+
+        <label for="age">Lapso   
+            <select name="lapso" class="select">
+                <option value="1">Lapso 1 </option>
+                <option value="2">Lapso 2 </option>
+                <option value="3">Lapso 3 </option>
+            </select>
         
-        </div>
-    </div>
-</div>
+        </label>
+        
+            
+            <input type="submit" value="Registrar" id="submitForm" />
+           
+    </form> 
+                    
+               
+                               
 
 <?php
 include_once 'templeat/footer.php'; 
