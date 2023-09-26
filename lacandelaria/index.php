@@ -1,17 +1,14 @@
 <?php 
 require_once 'templeat/header.php'; 
-//traer todos los años para registrar la nota
-    
-    $guardar = conseguirAnos($db);
+if (!isset($_SESSION['usuario_admin']) && !isset($_SESSION['usuario_lector'])) {
+    $_SESSION['alertas'] = 'Por favor introducir un usuario';
+    header('location: login_form.php');
+}
 ?>
-    <main>
-        <?php if ($guardar ==  true && !empty($guardar)): ?>
-          <?php
-            while($guardado = mysqli_fetch_assoc($guardar)):?>
-            <a href="notas.php?id=<?= $guardado['id']?>"><?= $guardado['ano'].'||'. $guardado['seccion']?></a>
-                
-        <?php endwhile;
-        endif; ?>
+    <main>  
+        <a href="pensum.php">
+            Pensum
+        </a>
         <div class="container">
             <div class="squares square1">
                 <div id="content">
@@ -137,10 +134,13 @@ require_once 'templeat/header.php';
                         </div>
                     </div>
                 </div>
-       
-        </div>
-
-
+                
+     
+         
+                  
+            </div>
+            
+           
             
     </main>
     <!--iconos de los años -->
@@ -148,6 +148,7 @@ require_once 'templeat/header.php';
      <!--footer -->                               
     <script src="https://kit.fontawesome.com/5818af7131.js" crossorigin="anonymous"></script>
     <?php
+    
   include_once 'templeat/footer.php';
   ?>
 

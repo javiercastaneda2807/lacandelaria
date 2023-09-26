@@ -1,26 +1,51 @@
 <?php 
 require_once 'templeat/header.php';
 
-if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['filas']) && isset($_POST['lapso'])) {
+if (!isset($_SESSION['usuario_admin']) && !isset($_SESSION['usuario_lector'])) {
+    $_SESSION['alertas'] = 'Por favor introducir un usuario';
+    header('location: login_form.php');
+    
+
+}
+
+if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['lapso'])) {
     $ano = $_POST['ano'];
     $materia = $_POST['materia'];  
     $lapso = $_POST['lapso'];
-    $f = $_POST['filas'];
+ 
+   
    
     
-}elseif(isset($_GET['materia']) && isset($_GET['ano']) && isset($_GET['lapso']) && isset($_GET['filas'])){
+}elseif(isset($_GET['materia']) && isset($_GET['ano']) && isset($_GET['lapso'])){
     $ano = $_GET['ano'];
     $materia = $_GET['materia']; 
     $lapso = $_GET['lapso'];
-    $f = $_GET['filas'];
+    
 }else{
-    echo 'los campos no deben estar vacios';
+    $_SESSION['alerta']['plan'] = 'los campos no deben estar vacios';
+    echo '<script>window.location="notas.php"</script>';
 }
  if (isset($materia) && $ano) {
      $sql = "select p.id, p.id_ano, p.id_materia,p.id, m.materia, a.ano, s.seccion from pensum p inner join materia m on p.id_materia = m.id inner join ano a on p.id_ano = a.id inner join seccion s on a.id_seccion = s.id where p.id_materia = $materia and p.id_ano = $ano";
      $guardar = mysqli_query($db, $sql);
     $notas_total = array();
- }
+
+    $periodo = $_SESSION['periodos']['periodo'];
+    
+    //planificacion(cantidad de evaluaciones)
+    $sql_plan = "select * from planificacion where id_materia = $materia and id_ano = $ano and lapso = $lapso and periodo = '$periodo'";
+    $guardar_plan =mysqli_query($db, $sql_plan);
+    $plan = mysqli_fetch_assoc($guardar_plan);
+
+    if (empty($plan)) {
+        $_SESSION['alerta']['plan'] = 'Por favor realizar la planificacion de esta materia ';
+        echo '<script>';
+         echo 'window.location=" notas.php"'  ;
+         echo '</script>';
+    }
+}
+
+
 
 ?>
 <?php if(isset($_SESSION['guardado']['exito'])):?>
@@ -62,12 +87,10 @@ if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['filas']) &
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Apellido</th>
                                     <th scope="col">Cedula</th>
-                                        <?php for($i=1; $i<=$f; $i++){
-                                               echo '<th>Nota'. $i .'</th>'; 
-                                             } ?>
-                                            
-                                    <th scope="col" class="lapso">Lapso</th>
+                                    <th scope="col">Notas</th> 
                                    
+                                   
+                                    <th scope="col" class="lapso">Lapso</th>
                                     <th scope="col">ENVIAR</th>
                             
                                     
@@ -76,9 +99,10 @@ if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['filas']) &
                             <tbody>
                         
                                 <?php
+                                        $periodo = $_SESSION['periodos']['id'];
+                                        $periodo_name = $_SESSION['periodos']['periodo'];
                                     if (isset($ano)){
-                                        
-                                        $alumnos = ConseguirTodosEstudiantes($db, $ano);   
+                                        $alumnos = ConseguirTodosEstudiantes($db, $ano, $periodo);   
 
                                     }else{
                                         echo 'error1'; 
@@ -99,38 +123,42 @@ if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['filas']) &
                                         <td><?= $alumno['nombre']?></td>
                                         <td><?= $alumno['apellido'] ?></td>
                                         <td><?= $alumno['cedula'] ?></td>
-                                                
+                                        <td>   
                                         <?php
-                                            if(existeNota($db, $alumno['id_alumno'], $guardado['id'])){
-                                                $notas_total = "select notas.id, notas.nota, notas.lapso, pensum.id_materia from notas inner join pensum on notas.id_pensum = pensum.id where notas.id_alumno = ".$alumno['id_alumno']." and id_pensum = $materia";
+                                            if(existeNota($db, $alumno['id_alumno'], $guardado['id'], $lapso, $periodo_name) ){
+                                                $notas_total = "select notas.id, notas.nota, notas.lapso, pensum.id_materia from notas inner join pensum on notas.id_pensum = pensum.id where notas.id_alumno = ".$alumno['id_alumno']." and id_pensum = ".$guardado['id']." and lapso =". $lapso. " and notas.periodo = '$periodo_name'";
                                                 $notas = mysqli_query($db, $notas_total);
                                                 //contando la cantidad de notas que tengo
                                                 $notas_count = mysqli_num_rows($notas);
+                                                $i = 0;
                                                 
                                                 while($nota = mysqli_fetch_assoc($notas)){
+                                                    
                                                             $i++;
                                                     
-                                                                echo '<td><input type="number" maxlength="5" name="nota'. $i .'" value="'.$nota['nota'].'"></td>';
+                                                                echo '<input type="number" maxlength="5" min="0" max="20" name="nota'. $i .'" value="'.$nota['nota'].'">';
                                                                 echo '<input type="hidden" value="'.$nota['id'].'" name="idnota'.$i.'">';
-                                                                echo $nota['id'];
+                                                                
     
+                                                               
                                                     }
+
+                                                 
                                                     
                                                     
                                                 }else{
                                                     
-                                                    for($i = 1; $i <= $f; $i++){
-                                                        echo '<td><input type="number" maxlength="5" name="nota'.$i.'" min="0" max="20"></td>';  
+                                                    for($i = 1; $i <= $plan['cantidad_evaluaciones']; $i++){
+                                                        echo '<input type="number" maxlength="5" name="nota'.$i.'" min="0" max="20">';  
                                                     }
                                                     
                                                 }
-                                            
                                              ?>
-                                                
+                                                </td>
                                               
                                                 <td><?=$lapso?></td>
                                                 
-                                                <input type="hidden" name="cantidad_notas" value="<?=$f?>">
+                                                <input type="hidden" name="cantidad_notas" value="<?=$plan['cantidad_evaluaciones']?>">
                                                 <input type="hidden" name="lapso" value="<?=$lapso?>">
                                                 <input type="hidden" name="alumno" value="<?= $alumno['id_alumno']?>">
                                                 <input type="hidden" name="pensum" value="<?=$guardado['id']?>">
