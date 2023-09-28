@@ -6,9 +6,10 @@ if (!isset($_SESSION['usuario_admin']) && !isset($_SESSION['usuario_lector'])) {
     if (isset($_GET['codigo'])) {
        
     $codigo= $_GET['codigo'];
+    $periodo = $_SESSION['periodos']['id'];
     
 
-    $sql = "SELECT a.nombre, a.apellido, a.id, a.edad, a.cedula, c.*, p.periodo, an.ano FROM cursando c inner join alumno a on c.id_alumno = a.id inner join periodo p on p.id = c.id_periodo inner join ano an on c.id_ano = an.id where a.id = $codigo";
+    $sql = "SELECT a.nombre, a.apellido, a.id, a.edad, a.cedula, c.*, p.periodo, an.ano FROM cursando c inner join alumno a on c.id_alumno = a.id inner join periodo p on p.id = c.id_periodo inner join ano an on c.id_ano = an.id where a.id = $codigo and c.id_periodo =$periodo";
     $editar = mysqli_query($db, $sql);
     }else{
         echo 'error';
@@ -33,9 +34,7 @@ if (!isset($_SESSION['usuario_admin']) && !isset($_SESSION['usuario_lector'])) {
         <div class="card">
             <?php if (!empty($editar)):
                 while($editado = mysqli_fetch_assoc($editar)):
-                    $ano_limitado = $editado['ano'];
-                   
-                
+                    $ano_limitado = $editado['ano']; 
             ?>
                 <form action="editar_view.php" method="POST" class="p-4">
                 <div class="card-header">
@@ -92,6 +91,7 @@ if (!isset($_SESSION['usuario_admin']) && !isset($_SESSION['usuario_lector'])) {
                         </div>
                         <div class="d-grid">
                             <input type="hidden" name="codigo" value="<?=$editado['id_cu'] ?>">
+                            <input type="hidden" name="id_alumno" value="<?=$editado['id'] ?>">
                             <div>
                             </div>
                             
@@ -103,10 +103,12 @@ if (!isset($_SESSION['usuario_admin']) && !isset($_SESSION['usuario_lector'])) {
             endif;
                 ?>            
                         
+                    
                     </form>
+                
             </div>
+        </div>
     </div>
-</div>
     
 <?php
     

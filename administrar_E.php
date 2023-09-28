@@ -16,11 +16,11 @@ if (!isset($_SESSION['usuario_admin']) && $_SESSION['usuario_lector']) {
                  Lista de estudiantes
                  <?php 
                   if (isset($_SESSION['alertas']['periodo'])) {
-                    echo $_SESSION['alertas']['periodo'];
+                    echo '<span style"color: green>'.$_SESSION['alertas']['periodo'].'</span>';
                     
                     }elseif (isset($_SESSION['Usuario']['exito'])) {
                     
-                        echo $_SESSION['Usuario']['exito'];
+                        echo '<span style"color: green;">'.$_SESSION['Usuario']['exito'].'</span>';
                     }
                     ?>
             

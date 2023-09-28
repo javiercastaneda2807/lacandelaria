@@ -2,9 +2,14 @@
 require 'model/conexion.php';
 session_start();
 if (isset($_POST['codigo'])){
+    $codigo = $_POST['codigo'];
+    $ano = $_POST['ano'];
+    $id_alumno = $_POST['id_alumno'];
+    $update = "select a.nombre from cursando c inner join alumno a on a.id = c.id_alumno where c.id_alumno = $id_alumno";
+    $update_query = mysqli_query($db, $update);
+    $updates_query = mysqli_fetch_assoc($update_query);
+    $alumno_name = $updates_query['nombre'];
     //edicion de estudiantes
-$codigo = $_POST['codigo'];
-$ano = $_POST['ano'];
 
 $url = "estudiantes.php";
 $url .= "?id=" . urldecode($ano);
@@ -47,12 +52,27 @@ if (!empty($codigo) && !empty($ano)) {
         
         $sql = "UPDATE cursando join alumno on cursando.id_alumno = alumno.id SET alumno.nombre = '$nombre_escapado', alumno.apellido = '$apellido_escapado', alumno.cedula = '$cedula', alumno.edad = '$edad_escapado', cursando.id_ano = '$ano' where cursando.id_cu = $codigo;";
         $guardar = mysqli_query($db, $sql);
-        if ($guardar == true) {
-            $_SESSION['guardado']['exito'] = 'Usuario editado con exito';
-            header('location: '. $url);
+        
+        if (isset($_SESSION['usuario_admin'])) {
+            $usuario_name = $_SESSION['usuario_admin']['nombre'];
+            $usuario_id = $_SESSION['usuario_admin']['id'];
         }else{
-            $_SESSION['guardado']['error'] = 'Error al registrar usuario';
-            header('location: '. $url);
+            $usuario_name = $_SESSION['usuario_lector']['nombre'];
+            $usuario_id = $_SESSION['usuario_lector']['id'];
+        }
+            $movimiento = "El usuario " . $usuario_name . " ha editado al Alumno ". $alumno_name. " con exito";
+            $sqli = "insert into auditoria values(null, '$movimiento', $usuario_id, now())";
+            $query = mysqli_query($db, $sqli);
+        if ($query) {
+        
+            if ($guardar == true) {
+                
+                $_SESSION['guardado']['exito'] = 'Alumno editado con exito';
+                header('location: '. $url);
+            }else{
+                $_SESSION['guardado']['error'] = 'Error al registrar usuario';
+                header('location: '. $url);
+            }
         }
     }else{
         $url_error = "editar_form.php";
@@ -97,13 +117,29 @@ if (!empty($codigo) && !empty($ano)) {
         
         $sql = "update usuarios set nombre = '$nombre_escapado', cargo = '$cargo_escapado', id_rol = '$id_cargo' where id = $id_usuario";
         $guardar = mysqli_query($db, $sql);
-        if ($guardar) {
-            $_SESSION['guardado'] = 'Guardado con exito';
-            header('location: admin.php');
-            exit();
+
+        if (isset($_SESSION['usuario_admin'])) {
+            $usuario_name = $_SESSION['usuario_admin']['nombre'];
+            $usuario_id = $_SESSION['usuario_admin']['id'];
         }else{
-            $_SESSION['alerta']['usuario'] = 'error al guardar';
-            header('Location: admin.php');
+            $usuario_name = $_SESSION['usuario_lector']['nombre'];
+            $usuario_id = $_SESSION['usuario_lector']['id'];
+        }
+
+        $movimiento = "El usuario " . $usuario_name . " ha editado un usuario";
+        $sqli = "insert into auditoria values(null, '$movimiento', $usuario_id, now())";
+        $query = mysqli_query($db, $sqli);
+
+        if ($query) {
+
+            if ($guardar) {
+                $_SESSION['guardado'] = 'Guardado con exito';
+                header('location: admin.php');
+                exit();
+            }else{
+                $_SESSION['alerta']['usuario'] = 'error al guardar';
+                header('Location: admin.php');
+            }
         }
     }else{
         $_SESSION['alertas'] = $alertas;

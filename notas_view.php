@@ -1,9 +1,10 @@
 <?php 
 require_once 'templeat/header.php';
+
 if (!isset($_SESSION['usuario_admin']) && !isset($_SESSION['usuario_lector'])) {
     $_SESSION['alertas'] = 'Por favor introducir un usuario';
     header('location: login_form.php');
-
+    
 
 }
 
@@ -21,7 +22,8 @@ if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['lapso'])) 
     $lapso = $_GET['lapso'];
     
 }else{
-    echo 'los campos no deben estar vacios';
+    $_SESSION['alerta']['plan'] = 'los campos no deben estar vacios';
+    echo '<script>window.location="notas.php"</script>';
 }
  if (isset($materia) && $ano) {
      $sql = "select p.id, p.id_ano, p.id_materia,p.id, m.materia, a.ano, s.seccion from pensum p inner join materia m on p.id_materia = m.id inner join ano a on p.id_ano = a.id inner join seccion s on a.id_seccion = s.id where p.id_materia = $materia and p.id_ano = $ano";
@@ -37,19 +39,21 @@ if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['lapso'])) 
 
     if (empty($plan)) {
         $_SESSION['alerta']['plan'] = 'Por favor realizar la planificacion de esta materia ';
-        header('location: notas.php ');
-        exit();
+        echo '<script>';
+        echo 'alert("Por favor realizar la planificacion de esta materia")
+            window.location=" notas.php"';
+         echo '</script>';
     }
- }else{
-    $_SESSION['alerta']['plan'] = 'los campos no deben estar vacios';
-    header('location: notas.php');
-    exit();
 }
 
 
 
+
 ?>
-<?php if(isset($_SESSION['guardado']['exito'])):?>
+<main>
+
+    
+    <?php if(isset($_SESSION['guardado']['exito'])):?>
     <div class="alert alert-success" role="alert">
         <?php echo $_SESSION['guardado']['exito']?>
       </div>
@@ -60,21 +64,21 @@ if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['lapso'])) 
 <?php endif; ?>
 
 <div class="container mt-2" style="height: 500px;  position: relative;">
-<div class="ayuda">
+    <div class="ayuda">
     
-    <div class="row justify-content-center">
+        <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card hola">
                 <div class="card-header" style="position: sticky; top: 0; background-color: white;">
                     
             
-           
+                
                                     <?php 
                                     if(!empty($guardar) && isset($guardar)) 
                                             $guardado = mysqli_fetch_assoc($guardar);
-                                                if (!empty($guardado)): ?>
+                                            if (!empty($guardado)): ?>
                                                                     
-                                            <div> <h4>Registro de notas de estudiantes de: <?=$guardado['materia']?> / <?=$guardado['ano'].' / '.$guardado['seccion'] ?></h4></div>
+                                                                    <div> <h4>Registro de notas de estudiantes de: <?=$guardado['materia']?> / <?=$guardado['ano'].' / '.$guardado['seccion'] ?></h4></div>
                                         <?php endif; ?>                             
                 </div>
                 <div class="">
@@ -84,7 +88,7 @@ if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['lapso'])) 
                                 <tr>
                                         
                                 
-                                   <th scope="col">#</th>
+                                    <th scope="col">#</th>
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Apellido</th>
                                     <th scope="col">Cedula</th>
@@ -93,7 +97,7 @@ if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['lapso'])) 
                                    
                                     <th scope="col" class="lapso">Lapso</th>
                                     <th scope="col">ENVIAR</th>
-                            
+                                    
                                     
                                 </tr>
                             </thead>
@@ -104,11 +108,11 @@ if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['lapso'])) 
                                         $periodo_name = $_SESSION['periodos']['periodo'];
                                     if (isset($ano)){
                                         $alumnos = ConseguirTodosEstudiantes($db, $ano, $periodo);   
-
+                                        
                                     }else{
                                         echo 'error1'; 
                                     }
-                                            if (!empty($alumnos)):
+                                    if (!empty($alumnos)):
                                             while($alumno = mysqli_fetch_assoc($alumnos)):  
                                                 
                                                 
@@ -116,8 +120,8 @@ if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['lapso'])) 
                                                 
                                                 
                                                 
-                                    <tr class="aaa">
-                                    <form action="notas_form.php" method="POST" > 
+                                                <tr class="aaa">
+                                                    <form action="notas_form.php" method="POST" > 
                                        
 
                                         <td><?= $alumno['id_alumno']?></td>
@@ -175,7 +179,7 @@ if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['lapso'])) 
                                         ?>     
                                     
                                         
-                                    </tr>
+                                </tr>
                                 </tbody>
                             </table>
                     
@@ -189,6 +193,7 @@ if (isset($_POST['materia']) && isset($_POST['ano']) && isset($_POST['lapso'])) 
     </div>  
 </div>
 
+</main>
 <?php
 include_once 'templeat/footer.php'; 
 borrarErrores();

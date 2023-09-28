@@ -14,13 +14,29 @@ if (isset($_POST['periodo_nuevo'])){
             if (count($alertas) == 0){
                 $sql = "insert into periodo values(null, '$periodo')";
                 $periodo = mysqli_query($db, $sql);
-                if ($periodo == true) {
-                    $_SESSION['guardado'] = 'Periodo registrado con exito';
-                    header('location: periodos.php');
-                    
+
+
+                if (isset($_SESSION['usuario_admin'])) {
+                    $usuario_name = $_SESSION['usuario_admin']['nombre'];
+                    $usuario_id = $_SESSION['usuario_admin']['id'];
                 }else{
-                    $_SESSION['alerta'] = 'Periodo ya existe';
-                    header('location: periodos.php');
+                    $usuario_name = $_SESSION['usuario_lector']['nombre'];
+                    $usuario_id = $_SESSION['usuario_lector']['id'];
+                }
+
+                $movimiento = "El usuario" . $usuario_name . " ha registrado un periodo";
+                $sqli = "insert into auditoria values(null, '$movimiento', $usuario_id, now())";
+                $query = mysqli_query($db, $sqli);
+                if ($query) {
+                    
+                    if ($periodo == true) {
+                        $_SESSION['guardado'] = 'Periodo registrado con exito';
+                        header('location: periodos.php');
+                        
+                    }else{
+                        $_SESSION['alerta'] = 'Periodo ya existe';
+                        header('location: periodos.php');
+                    }
                 }
             
             }else{
@@ -88,11 +104,26 @@ if (isset($_POST['periodo_nuevo'])){
                 $sql = "insert into planificacion values(null, '$id_materia', '$id_ano', '$evaluaciones', '$lapso_escapado', '$periodo')";
                 $guardar = mysqli_query($db, $sql);
                 if ($guardar) {
-                    $_SESSION['guardado'] = 'Guardado exitosamente';
-                    header('Location: planificacion.php');
-                    
-                }else{
-                    echo 'error4';
+
+                    if (isset($_SESSION['usuario_admin'])) {
+                        $usuario_name = $_SESSION['usuario_admin']['nombre'];
+                        $usuario_id = $_SESSION['usuario_admin']['id'];
+                    }else{
+                        $usuario_name = $_SESSION['usuario_lector']['nombre'];
+                        $usuario_id = $_SESSION['usuario_lector']['id'];
+                    }
+    
+                    $movimiento = "El usuario " . $usuario_name . " ha registrado una planificacion";
+                    $sqli = "insert into auditoria values(null, '$movimiento', $usuario_id, now())";
+                    $query = mysqli_query($db, $sqli);
+
+                    if ($query) {
+                        $_SESSION['guardado'] = 'Guardado exitosamente';
+                        header('Location: planificacion.php');
+                        
+                    }else{
+                        echo 'error4';
+                    }
                 }
             }
         }else{

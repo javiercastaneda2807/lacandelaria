@@ -2,13 +2,12 @@
 require_once 'templeat/header.php'; 
 if (!isset($_SESSION['usuario_admin']) && !isset($_SESSION['usuario_lector'])) {
     $_SESSION['alertas'] = 'Por favor introducir un usuario';
-    header('location: login_form.php');
+    echo '<script>';
+        echo 'window.location="login_form.php"';
+         echo '</script>';
 }
 ?>
     <main>  
-        <a href="pensum.php">
-            Pensum
-        </a>
         <div class="container">
             <div class="squares square1">
                 <div id="content">

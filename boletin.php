@@ -1,7 +1,8 @@
 <?php 
 require_once 'model/conexion.php';
 require_once 'fpdf/fpdf.php';
-
+session_start();
+$periodo = $_SESSION['periodos']['periodo'];
 class PDF extends FPDF
 {
 // Cabecera de página
@@ -37,7 +38,7 @@ if (isset($_GET['lapso']) && isset($_GET['alumno']) ) {
     $id_alumno = $_GET['alumno'];
     $lapso = $_GET['lapso'];
 
-    $sqlM = "select DISTINCT m.materia, n.id_pensum, AVG(n.nota) as notas from notas n inner join pensum p on n.id_pensum = p.id inner join materia m on m.id = p.id_materia where n.id_alumno = $id_alumno and n.lapso = $lapso GROUP by n.lapso, n.id_pensum;";
+    $sqlM = "select DISTINCT m.materia, n.id_pensum, AVG(n.nota) as notas from notas n inner join pensum p on n.id_pensum = p.id inner join materia m on m.id = p.id_materia where n.id_alumno = $id_alumno and n.lapso = $lapso and periodo = '$periodo' GROUP by n.lapso, n.id_pensum;";
     $resultadoM = mysqli_query($db, $sqlM);
 
 while ($resultado = mysqli_fetch_assoc($resultadoM)) {
@@ -45,7 +46,7 @@ while ($resultado = mysqli_fetch_assoc($resultadoM)) {
     $pdf->Cell(70,10, iconv("UTF-8", "ISO-8859-1//TRANSLIT", $resultado['materia']), 1,0,'C', 0);
     $id_pensum = $resultado['id_pensum'];
     //notas una por una
-    $sql = "select nota from notas where id_alumno = $id_alumno and id_pensum = $id_pensum and lapso = $lapso";
+    $sql = "select nota from notas where id_alumno = $id_alumno and id_pensum = $id_pensum and lapso = $lapso and periodo = '$periodo'";
     $notas = mysqli_query($db, $sql);
     while($nota = mysqli_fetch_assoc($notas)){
         $pdf ->Cell(20,10, $nota['nota'],1,0,'C',0);
@@ -56,7 +57,7 @@ while ($resultado = mysqli_fetch_assoc($resultadoM)) {
 
 
     $id_alumno = $_GET['alumno'];
-    $sqlM = "SELECT DISTINCT materia, id_pensum FROM notas n INNER JOIN pensum p on p.id = n.id_pensum INNER JOIN materia m on m.id = p.id_materia WHERE id_alumno = $id_alumno";
+    $sqlM = "SELECT DISTINCT materia, id_pensum FROM notas n INNER JOIN pensum p on p.id = n.id_pensum INNER JOIN materia m on m.id = p.id_materia WHERE id_alumno = $id_alumno and periodo = '$periodo'";
     $resultadoM = mysqli_query($db, $sqlM);
     while ($resultado = mysqli_fetch_assoc($resultadoM)) {
         $promedios_total = array();
@@ -64,7 +65,7 @@ while ($resultado = mysqli_fetch_assoc($resultadoM)) {
 
         $pdf->Cell(65,10, iconv("UTF-8", "ISO-8859-1//TRANSLIT", $resultado['materia']), 1,0,'C', 0);
 
-        $nota_final = "select avg(n.nota) as nota_final,m.materia from notas n inner join pensum p on p.id = n.id_pensum inner join materia m on p.id_materia = m.id where n.id_alumno = $id_alumno and n.id_pensum = $id_pensum group by n.lapso, n.id_pensum";
+        $nota_final = "select avg(n.nota) as nota_final,m.materia from notas n inner join pensum p on p.id = n.id_pensum inner join materia m on p.id_materia = m.id where n.id_alumno = $id_alumno and n.id_pensum = $id_pensum and periodo = '$periodo' group by n.lapso, n.id_pensum";
         $nota = mysqli_query($db, $nota_final);
         if (!empty($nota)) {
            while ($notas = mysqli_fetch_assoc($nota)){

@@ -39,14 +39,22 @@ if (!empty($_POST["cargo"]) && !empty($_POST["password"]) && !empty($_POST['nomb
         $guardar = mysqli_query($db, $sql);
         if ($guardar == true && mysqli_num_rows($guardar) > 0) {
             $usuario = mysqli_fetch_assoc($guardar);
+            $usuario_name = $usuario['nombre'];
+            $usuario_id = $usuario['id'];
             
-        if($usuario['id_rol'] == 1){
-            $_SESSION['usuario_admin'] = $usuario; 
-            header('location: index.php');
-
-        }elseif($usuario['id_rol'] == 2){
-            $_SESSION['usuario_lector'] = $usuario;
-            header('location: index.php');
+            $movimiento = "El usuario ". $usuario_name. " ha iniciado sesión";
+            $sqli = "insert into auditoria values(null, '$movimiento', $usuario_id, now())";
+           $query = mysqli_query($db, $sqli);
+           if ($query) {
+            
+            if($usuario['id_rol'] == 1){
+                $_SESSION['usuario_admin'] = $usuario; 
+                header('location: index.php');
+                
+            }elseif($usuario['id_rol'] == 2){
+                $_SESSION['usuario_lector'] = $usuario;
+                header('location: index.php');
+            }
         }
     }else{
         $_SESSION['alerta'] = 'Usuario desconocido';

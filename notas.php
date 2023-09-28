@@ -6,12 +6,7 @@ if (!isset($_SESSION['usuario_admin']) && !isset($_SESSION['usuario_lector'])) {
 
 $query = "SELECT ano.id, ano.ano, seccion.seccion FROM ano left join seccion on seccion.id = ano.id_seccion";
 $resultado= mysqli_query($db, $query);
-
-if (isset($_SESSION['alerta']['plan'])): ?>
-    <div class="alert alert-danger" role="alert">
-    <?php echo $_SESSION['alerta']['plan']; ?>
-  </div>
-<?php endif;?>
+?>
 <script language="javascript">
 			$(document).ready(function(){
 				$("#cbx_ano").change(function () {
@@ -26,7 +21,14 @@ if (isset($_SESSION['alerta']['plan'])): ?>
 			});
 
 </script>
+<?php if (isset($_SESSION['alerta']['plan'])): ?>
+    <div class="alert alert-danger" role="alert">
+    <?php echo $_SESSION['alerta']['plan']; ?>
+  </div>
+<?php endif;?>
 <h2>Registro de notas</h2>
+
+<!-- notas_view.php -->
     <form method="POST" action='notas_view.php' id="register">
         <label for="first-name">Año
         <select name="ano" id="cbx_ano" class="select">
@@ -63,7 +65,18 @@ if (isset($_SESSION['alerta']['plan'])): ?>
             <input type="submit" value="Registrar" id="submitForm" />
            
     </form> 
-                    
+        
+    
+    <script>
+        const formulario = document.querySelector('#register')
+
+        formulario.addEventListener('submit', () => {
+            
+            // console.log('hola');
+
+            
+        })
+    </script>
                
                                
 

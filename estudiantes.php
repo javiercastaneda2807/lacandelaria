@@ -102,7 +102,9 @@ if (isset($_SESSION['eliminado']['exito'])) : ?>
                                     <td><?= $alumno['seccion'] ?></td> 
                                     <td><?= $alumno['periodo'] ?></td> 
                                     <td><a  title="Editar" class="text-success" href="editar_form.php?codigo=<?=$alumno['id_alumno']?>"><i class="bi bi-pencil-square"></a></i>
-                                    <a title="Eliminar Estudiante" onclick="return confirm('Estas seguro de eliminar?');" class="text-danger" href="eliminar.php?codigo=<?=$alumno['id_alumno']?>&ano=<?=$codigo?>"><i class="bi bi-trash3"></i>
+                                    <?php if(isset($_SESSION['usuario_admin'])): ?>
+                                    <a title="Eliminar Estudiante" onclick="return confirm('Estas seguro de eliminar?');" class="text-danger" href="eliminar.php?id_alumno=<?=$alumno['id_alumno']?>&ano=<?=$alumno['id_ano']?>"><i class="bi bi-trash3"></i>
+                                    <?php endif; ?>
                                     <a title="Ver Nota" class="text-success" href="notas_general.php?alumno=<?=$alumno['id_alumno']?>&ano=<?=$alumno['id_ano'] ?>"><i class="bi bi-archive-fill"></i></a>
                                     </td> 
                                 </tr>

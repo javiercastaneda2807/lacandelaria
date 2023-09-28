@@ -43,14 +43,26 @@ $url .= "&filas=" .urlencode($cantidad);
                   }
                   if ($guardar == true) {
                     $_SESSION['guardado']['exito'] = 'Nota Editada';
-                    header("Location: " . $url);
-                    exit();
+                    
                 }else{
                     $_SESSION['guardado']['error'] = 'fallo al editar la nota';
                     header("Location: " . $url);
                     exit();
                 }
-                
+                if (isset($_SESSION['usuario_admin'])) {
+                    $usuario_name = $_SESSION['usuario_admin']['nombre'];
+                    $usuario_id = $_SESSION['usuario_admin']['id'];
+                }else{
+                    $usuario_name = $_SESSION['usuario_lector']['nombre'];
+                    $usuario_id = $_SESSION['usuario_lector']['id'];
+                }
+                    $movimiento = "El usuario " . $usuario_name . " ha editado una nota";
+                    $sqli = "insert into auditoria values(null, '$movimiento', $usuario_id, now())";
+                    $query = mysqli_query($db, $sqli);
+                    if ($query) {
+                        header("Location: " . $url);
+                        exit();
+                    }
                
             }else{
                 for ($i=1; $i<=$cantidad; $i++) { 
@@ -61,14 +73,29 @@ $url .= "&filas=" .urlencode($cantidad);
                 }
                 if ($guardar == true) {
                     $_SESSION['guardado']['exito'] = 'Nota registrada';
-                    header("Location: " . $url);
-                    exit();
+                    
+                   
                 }else{
                     $_SESSION['guardado']['error'] = 'Fallo al registrar nota';
                     header("Location: " . $url);
                     exit();
                 }
-                
+                if (isset($_SESSION['usuario_admin'])) {
+                    $usuario_name = $_SESSION['usuario_admin']['nombre'];
+                    $usuario_id = $_SESSION['usuario_admin']['id'];
+                }else{
+                    $usuario_name = $_SESSION['usuario_lector']['nombre'];
+                    $usuario_id = $_SESSION['usuario_lector']['id'];
+                }
+                    $movimiento = "El usuario " . $usuario_name . " ha registrado una nota";
+                    $sqli = "insert into auditoria values(null, '$movimiento', $usuario_id, now())";
+                    $query = mysqli_query($db, $sqli);
+                    if ($query) {
+                        header("Location: " . $url);
+                        exit();
+                    }else{
+                        echo 'error';
+                    }
 
         }
         

@@ -47,18 +47,31 @@ if (count($alertas) == 0) {
     //vinculando los datos que nos lleguen del formulario a la base de datos
     $sql = "insert into alumno values(null, '$nombre_escapado', '$apellido_escapado', '$cedula_escapado', '$edad_escapado')";
     $guardar = mysqli_query($db, $sql);
-    
 
-   if ($guardar == true) {
-    $_SESSION['alerta'] = 'Usuario registrado con exito';
-    header('location: registrar_form.php');
-    exit();
+    if (isset($_SESSION['usuario_admin'])) {
+        $usuario_name = $_SESSION['usuario_admin']['nombre'];
+        $usuario_id = $_SESSION['usuario_admin']['id'];
+    }else{
+        $usuario_name = $_SESSION['usuario_lector']['nombre'];
+        $usuario_id = $_SESSION['usuario_lector']['id'];
+    }
     
-   }else {
-    $_SESSION['alerta'] = 'Error al registrar Usuario';
-    header('location: registrar_form.php');
-    exit();
-   }
+    $movimiento = "El usuario" .$usuario_name. " ha registrado un alumno";
+    $sqli = "insert into auditoria values(null, '$movimiento', $usuario_id, now())";
+   $query = mysqli_query($db, $sqli);
+    
+if ($query) {
+    if ($guardar == true) {
+        $_SESSION['alerta'] = 'Alumno registrado con exito';
+        header('location: registrar_form.php');
+        exit();
+        
+    }else {
+        $_SESSION['alerta'] = 'Error al registrar Alumno';
+        header('location: registrar_form.php');
+        exit();
+    }
+}
  
     
 }else {
@@ -104,13 +117,24 @@ if (count($alertas) == 0) {
 
         $sql = "insert into usuarios values(null, '$nombre_escapado', '$cargo', '$hashpassword', '$rol_id')";
         $guardar = mysqli_query($db, $sql);
-        
-        if ($guardar) {
-            $_SESSION['guardado'] = 'Usuario registrado con exito';
-            header('location: admin.php');
-        }else{
-            $_SESSION['alerta'] = 'error al registrar usuario';
-            header('location: usuario_nuevo.php');
+
+        if (isset($_SESSION['usuario_admin'])) {
+            $usuario_name = $_SESSION['usuario_admin']['nombre'];
+            $usuario_id = $_SESSION['usuario_admin']['id'];
+        }
+
+        $movimiento = "El usuario " . $usuario_name . " ha creado un nuevo usuario";
+        $sqli = "insert into auditoria values(null, '$movimiento', $usuario_id, now())";
+        $query = mysqli_query($db, $sqli);
+        if ($query) {
+            
+            if ($guardar) {
+                $_SESSION['guardado'] = 'Usuario registrado con exito';
+                header('location: admin.php');
+            }else{
+                $_SESSION['alerta'] = 'error al registrar usuario';
+                header('location: usuario_nuevo.php');
+            }
         }
 
         

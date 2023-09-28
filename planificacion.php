@@ -4,33 +4,33 @@ require_once 'templeat/header.php';
     $query = "SELECT ano.id, ano.ano, seccion.seccion FROM ano left join seccion on seccion.id = ano.id_seccion";
 	$resultado= mysqli_query($db, $query);
 ?>
-<?php if (isset($_SESSION['guardado'])): ?>
-        <div class="alert alert-success" role="alert">
-        <?php echo $_SESSION['guardado']; ?>
-      </div>
-      <?php elseif(isset($_SESSION['alerta'])): ?>
-      <div class="alert alert-danger" role="alert">
-        <?php echo $_SESSION['alerta']; ?>
-      </div>
-      <?php endif; ?>
       <!--Funcion de js/ajax para detectar el cambio de año-->
       <script language="javascript">
-			$(document).ready(function(){
-				$("#cbx_ano").change(function () {
-
-					// $('#cbx_localidad').find('option').remove().end().append('<option value="whatever"></option>').val('whatever');
-					
-					$("#cbx_ano option:selected").each(function () {
-						id_ano = $(this).val();
-                        console.log(id_ano);
-						$.post("getMateria.php", { id_ano: id_ano }, function(data){
-							$("#cbx_materia").html(data);
+          $(document).ready(function(){
+              $("#cbx_ano").change(function () {
+                  
+                  // $('#cbx_localidad').find('option').remove().end().append('<option value="whatever"></option>').val('whatever');
+                  
+                  $("#cbx_ano option:selected").each(function () {
+                      id_ano = $(this).val();
+                      console.log(id_ano);
+                      $.post("getMateria.php", { id_ano: id_ano }, function(data){
+                          $("#cbx_materia").html(data);
 						});            
 					});
 				})
 			});
-
-		</script>
+            
+            </script>
+            <?php if (isset($_SESSION['guardado'])): ?>
+                    <div class="alert alert-success" role="alert">
+                    <?php echo $_SESSION['guardado']; ?>
+                  </div>
+                  <?php elseif(isset($_SESSION['alerta'])): ?>
+                  <div class="alert alert-danger" role="alert">
+                    <?php echo $_SESSION['alerta']; ?>
+                  </div>
+                  <?php endif; ?>
 <h2>Planificacion de las materias</h2>
     <form method="POST" action='periodos_view.php' id="register">
 

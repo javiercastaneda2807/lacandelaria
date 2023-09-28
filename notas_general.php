@@ -26,11 +26,12 @@ if (isset($_GET['alumno'])) {
     
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card hola">
+            <div class="card hola" style="position: relative;">
                 <div class="card-header" style="position: sticky; top: 0; background-color: white;">
                 <?php if(mysqli_num_rows($guardar) > 0): ?>
-                    Listado de notas de <?=$guardado['nombre'].' '.$guardado['apellido']?> 
+                    <p style="margin: 0;"> Listado de notas de <?=$guardado['nombre'].' '.$guardado['apellido']?> </p>
                 <?php else: ?>
+              
                     <p style="color: black; background-color: red; border-radius: 20px; font-weight: bold;" >No hay notas para mostrar</p>
                     <?php endif; ?>
                                     
@@ -97,12 +98,6 @@ if (isset($_GET['alumno'])) {
                                 
                                 
                             </tbody>
-                            <?php
-                            if (!empty($promedio_global)) {
-
-                                     echo $promedio_global; 
-                            }
-                            ?>
                         </table>
 
                     </div>
@@ -113,10 +108,16 @@ if (isset($_GET['alumno'])) {
             </div>
         </div>
     </div>  
+                <?php
+                            if (!empty($promedio_global)) {
+
+                                     echo '<p style="padding: 10px; font-weight: bold;"> Promedio final: '.$promedio_global.'</p>'; 
+                            }
+                            ?>
 
                               <div class="btn-crear">
 
-                                      <?php $sql = "SELECT DISTINCT lapso FROM `notas` where id_alumno = $id_alumno and periodo = $periodo order by lapso";
+                                      <?php $sql = "SELECT DISTINCT lapso FROM `notas` where id_alumno = $id_alumno and periodo = '$periodo' order by lapso";
                                          $boletines = mysqli_query($db, $sql);
                                          $boletin_count = mysqli_num_rows($boletines);
                                          

@@ -50,7 +50,7 @@ if (!isset($_SESSION['usuario_admin']) && !isset($_SESSION['usuario_lector'])) {
                                     <?php if(isset($_SESSION['usuario_admin'])): ?>
                                     
                                     <td><a  title="Editar" class="text-success" href="editar_usuario.php?usuario=<?=$usuario['id']?>"><i class="bi bi-pencil-square"></a></i>
-                                    <a title="Eliminar usuario" onclick="return confirm('Estas seguro de eliminar?');" class="text-danger" href="eliminar.php?codigo=<?=$usuario['id']?>"><i class="bi bi-trash3"></i>
+                                    <a title="Eliminar usuario" onclick="return confirm('Estas seguro de eliminar?');" class="text-danger" href="eliminar.php?usuario=<?=$usuario['id']?>"><i class="bi bi-trash3"></i>
                                     </td> 
                                     <?php endif; ?>
                                 </tr>

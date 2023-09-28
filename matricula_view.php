@@ -21,6 +21,7 @@ if (isset($_SESSION['alerta'])) : ?>
 </div>
 <?php endif;?>
 
+<main>
 <div class="container mt-2" style="height: 500px;  position: relative;">
 <div class="ayuda">
     
@@ -62,6 +63,7 @@ if (isset($_SESSION['alerta'])) : ?>
                                             while($alumno = mysqli_fetch_assoc($alumnos)): 
                                                 $promedio_global = array();
                                                 $promedio_general = array();
+                                                $ano = $alumno['id_ano'];
                                             $i++  
                                 ?>
                                 <tr class="">
@@ -100,12 +102,10 @@ if (isset($_SESSION['alerta'])) : ?>
                                    
                                     
                                     $promedio_global['nota'] = array_sum($promedio_general)/count($promedio_general);
-                                    $notas_c = count($promedio_global);
                                     
-                                    $array[] = $notas_c; 
+                                    
+                                }
                                 
-                            }
-                                    
                                  
                         
                         ?>  
@@ -118,35 +118,27 @@ if (isset($_SESSION['alerta'])) : ?>
                         <?php else: ?>
                         <td>No hay notas registradas</td>  
                         <?php endif; ?>
-
-                        
-                        <input type="hidden" name="id_alumno<?=$i?>" value="<?=$id_alumno?>">
                         <?php  $alum = "select id_alumno from cursando c where id_periodo = $periodo_new and id_alumno = $id_alumno";  
                             $alumno_verify = mysqli_query($db, $alum);
                             $alumno = mysqli_fetch_assoc($alumno_verify);
                             
                             if (mysqli_num_rows($alumno_verify) > 0) {
-                                echo '<td style = "color: black; background-color: green;" > Ya</td>';
+                                echo '<td style = "color: black; background-color: #b3d4ba;"><a style="color: black;" href="matricula_verificar.php?alumno='.$id_alumno.'&ano='.$ano.'">Ver detalles</a> </td>';
                             }else{
-                                echo '<td style = "color: white; background-color: red;"> no</td>';
+                                echo '<td style = "color: black; background-color: #f8d7da;"><a style="color: black;" href="matricula_verificar.php?alumno='.$id_alumno.'&ano='.$ano.'">Ver detalles</a> </td>';
                             }
-                            
+                          #f8d7da  
                         ?>
                     </tr>   
                     <?php
                 endwhile; 
-                $nota = count($array);
-                $cuenta_alumno = mysqli_num_rows($alumnos);?>
-                <input type="hidden" name="ano" value="<?=$codigo?>">
-                <input type="hidden" name="cuenta" value="<?=$cuenta_alumno?>">
+               ?>
+                
                 </tbody>
                     </table>
-                <?php if($nota == $cuenta_alumno):?>
-                <input type="submit">
-                <?php endif; ?>
+               
                 <?php endif;      
-                ?>
-                        
+                ?>   
                     </form>
                     </tbody>
                     </table>
@@ -161,6 +153,7 @@ if (isset($_SESSION['alerta'])) : ?>
 </div>
 
 
+</main>
 
 <?php include_once 'templeat/footer.php';
 borrarErrores(); ?>

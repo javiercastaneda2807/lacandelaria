@@ -59,7 +59,7 @@ if (empty($_POST['buscador'])) {
                                 ?>
                         
                                 <tr class="">
-                                    <td scope="row"><?= $busqueda['id_cu'] ?></td>
+                                    <td scope="row"><?= $busqueda['id_alumno'] ?></td>
                                     <td><?= $busqueda['nombre']?></td>
                                     <td><?= $busqueda['apellido'] ?></td>
                                     <td><?= $busqueda['cedula'] ?></td>
@@ -67,7 +67,7 @@ if (empty($_POST['buscador'])) {
                                     <td><?= $busqueda['seccion'] ?></td> 
                                     <td><?= $busqueda['periodo'] ?></td> 
                                     <td><a  title="Editar" class="text-success" href="editar_form.php?codigo=<?=$busqueda['id_alumno']?> "><i class="bi bi-pencil-square"></a></i>
-                                    <a title="Eliminar Estudiante" onclick="return confirm('Estas seguro de eliminar?');" class="text-danger" href="eliminar.php?codigo=<?=$busqueda['id_alumno']?>&ano=<?=$codigo?>"><i class="bi bi-trash3"></i>
+                                    <a title="Eliminar Estudiante" onclick="return confirm('Estas seguro de eliminar?');" class="text-danger" href="eliminar.php?id_alumno=<?=$busqueda['id_alumno']?>&ano=<?=$busqueda['id_ano']?>"><i class="bi bi-trash3"></i>
                                     <a title="Ver Nota" class="text-success" href="notas_general.php?alumno=<?=$busqueda['id_alumno']?>&ano=<?=$busqueda['id_ano'] ?>"><i class="bi bi-archive-fill"></i></a>
                                     </td> 
                                 </tr>
